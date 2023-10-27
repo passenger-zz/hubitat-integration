@@ -11,9 +11,11 @@
  metadata {
 	definition (name: "SAJ Solar Inverter", namespace: "SAJ", author: "magnus") {
 		capability "Sensor"
-		capability "Energy Meter"
-        capability "Power Meter"
+		capability "EnergyMeter"
+        capability "PowerMeter"
+        capability "PowerSource"
         capability "Refresh"
+        capability "TemperatureMeasurement"
 
 		attribute "totalGen", "number"
         attribute "totalRunTime", "number"
@@ -382,8 +384,17 @@ private setRunState(rawValue) {
     def value = rawValue.toInteger()
     def descriptionText = "${device.displayName} running state ${value}"
     if (debug) log.debug "${descriptionText}"
-    state.runState = value
-    sendEvent(name: "runState", value: state.runState, descriptionText: descriptionText)
+    //state.runState = value
+    //sendEvent(name: "runState", value: state.runState, descriptionText: descriptionText)
+ 
+    //ENUM ["battery", "dc", "mains", "unknown"]
+    if(value == 2) {
+        state.runState = 'dc'
+    }
+    else {
+        state.runState = 'mains'
+    }
+    sendEvent(name: "powerSource", value: state.runState, descriptionText: descriptionText)
 }
 
 private setBusVol(rawValue) {
@@ -403,7 +414,7 @@ private setDevTemp(rawValue) {
     def descriptionText = "${device.displayName} device temperature ${value} ${unit}"
     if (debug) log.debug "${descriptionText}"
     state.devTemp = value
-    sendEvent(name: "devTemp", value: state.devTemp, descriptionText: descriptionText, unit: unit)
+    sendEvent(name: "temperature", value: state.devTemp, descriptionText: descriptionText, unit: unit)
 }
 
 private setCo2red(rawValue) {
