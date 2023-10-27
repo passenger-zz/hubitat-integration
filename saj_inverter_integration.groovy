@@ -39,6 +39,7 @@
 		attribute "busVol", "number"
 		attribute "devTemp", "number"
 		attribute "co2Red", "number"
+        attribute "tileHTML", "string"
 	}
 
     preferences {
@@ -169,10 +170,14 @@ def fetchInverterData() {
                 setCo2red(co2Red)
                 setRunState(runState)
             }
+
         } catch (e) {
             log.error "Unhandled error: $e"
             clear()
         }
+        
+        updateTile(state.gridConPwr, state.todayGen, state.totalGen)
+        
     }
 }
 
@@ -196,6 +201,17 @@ private clear() {
     setDevTemp(0)
     setRunState(0)
 }
+
+private updateTile(power, todayGen, totalGen) {
+    def tileHTML = "<table class=\"SolarInverter\">"
+    tileHTML += "<tr><th>Power</th><td>${power} <span class=\"small\">W</span></td></tr>"
+    tileHTML += "<tr><th>Today</th><td>${todayGen} <span class=\"small\">kWh</span></td></tr>"
+    tileHTML += "<tr><th>Total</th><td>${totalGen} <span class=\"small\">kWh</span></td></tr>"
+    tileHTML += "</table>"
+    if (debug) log.debug "${tileHTML}"
+    state.tileHTML = tileHTML
+    sendEvent(name: "tileHTML", value: state.tileHTML)
+} 
 
 private setTotalGen(rawValue) {
     if(rawValue.toInteger() == 65535) rawValue = 0;
