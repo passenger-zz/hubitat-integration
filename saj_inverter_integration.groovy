@@ -1,5 +1,5 @@
 /**
- *  SAJ Solar Inverter integration
+ *  Hubitat SAJ Solar Inverter integration
  *
  *  Author: Magnus Forslund
  *
