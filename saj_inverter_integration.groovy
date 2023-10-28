@@ -204,6 +204,7 @@ private clear() {
 
 private updateTile(power, todayGen, totalGen) {
     def tileHTML = "<table class=\"SolarInverter\">"
+    tileHTML += "<caption><span class=\"material-symbols-outlined\">solar_power</span></caption>"
     tileHTML += "<tr><th>Power</th><td>${power} <span class=\"small\">W</span></td></tr>"
     tileHTML += "<tr><th>Today</th><td>${todayGen} <span class=\"small\">kWh</span></td></tr>"
     tileHTML += "<tr><th>Total</th><td>${totalGen} <span class=\"small\">kWh</span></td></tr>"
