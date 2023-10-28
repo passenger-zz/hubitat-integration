@@ -101,14 +101,14 @@ def getPrice() {
                         consumptionUnit = resp.data.data.viewer.homes[0].consumption.nodes[0].consumptionUnit?.toString()
                     }
                     else {
-                        log.debug "Missing consumption!"
+                        if(debug) log.debug "Missing consumption!"
                         consumption = {}
                         consumption.price = 0
                         consumption.unit = 'N/A'
                     }
 
                     def priceInfo = resp.data.data.viewer.homes[0].currentSubscription.priceInfo
-                    log.debug "Current priceInfo: ${priceInfo.current}"
+                    if(debug) log.debug "Current priceInfo: ${priceInfo.current}"
                     
                     def price = Math.round(priceInfo.current.total * 100)
                     def priceMaxDay = Math.round(MaxValue(today) *100)
@@ -280,13 +280,13 @@ def MinValue(List values){
 }
 
 def MedValue(List values){
-    log.debug("MedValue")
+    if(debug) log.debug("MedValue")
 	def med = 0
 	values.each{
         med = med + it.total
     }
     med = med / values.size
-    log.debug("   med" + med)
+    if(debug) log.debug("   med" + med)
     return med
 }
 
