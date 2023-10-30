@@ -101,14 +101,14 @@ def getPrice() {
                         consumptionUnit = resp.data.data.viewer.homes[0].consumption.nodes[0].consumptionUnit?.toString()
                     }
                     else {
-                        if(debug) log.debug "Missing consumption!"
+                        log.debug "Missing consumption!"
                         consumption = {}
                         consumption.price = 0
                         consumption.unit = 'N/A'
                     }
 
                     def priceInfo = resp.data.data.viewer.homes[0].currentSubscription.priceInfo
-                    if(debug) log.debug "Current priceInfo: ${priceInfo.current}"
+                    log.debug "Current priceInfo: ${priceInfo.current}"
                     
                     def price = Math.round(priceInfo.current.total * 100)
                     def priceMaxDay = Math.round(MaxValue(today) *100)
@@ -157,7 +157,7 @@ def getPrice() {
 
                     sendEvent(name: "currency", value: state.currency)
                     
-                    updateTile(price, priceNextHour, pricePlus2Hour, priceMedDay, unit)
+                    updateTile(price, priceNextHour, pricePlus2Hour, priceMaxDay, priceMinDay, priceMedDay, priceUnit)
                 }
             }
         } catch (e) {
@@ -166,13 +166,15 @@ def getPrice() {
     }
 }
 
-private updateTile(price, priceNextHour, pricePlus2Hour, priceMedDay, unit) {
+private updateTile(price, priceNextHour, pricePlus2Hour, priceMaxDay, priceMinDay, priceMedDay, unit) {
     def tileHTML = "<table class=\"tibber\">"
     tileHTML += "<caption><span class=\"material-symbols-outlined\">electric_bolt</span></caption>"
-    tileHTML += "<tr><th>Price</th><td>${price} <span class=\"small\">${unit}</span></td></tr>"
-    tileHTML += "<tr><th>+1h</th><td>${priceNextHour} <span class=\"small\">${unit}</span></td></tr>"
-    //tileHTML += "<tr><th>+2h</th><td>${pricePlus2Hour} <span class=\"small\">${unit}</span></td></tr>"
-    tileHTML += "<tr><th>Med</th><td>${priceMedDay} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr class=\"price\"><th>Price</th><td>${price} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr class=\"future\"><th>+1h</th><td>${priceNextHour} <span class=\"small\">${unit}</span></td></tr>"
+    //tileHTML += "<tr class=\"future\"><th>+2h</th><td>${pricePlus2Hour} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr class=\"min\"><th>Min</th><td>${priceMinDay} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr class=\"med\"><th>Med</th><td>${priceMedDay} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr class=\"max\"><th>Max</th><td>${priceMaxDay} <span class=\"small\">${unit}</span></td></tr>"
     tileHTML += "</table>"
     if (debug) log.debug "${tileHTML}"
     state.tileHTML = tileHTML
@@ -280,13 +282,13 @@ def MinValue(List values){
 }
 
 def MedValue(List values){
-    if(debug) log.debug("MedValue")
+    log.debug("MedValue")
 	def med = 0
 	values.each{
         med = med + it.total
     }
     med = med / values.size
-    if(debug) log.debug("   med" + med)
+    log.debug("   med" + med)
     return med
 }
 

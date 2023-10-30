@@ -1,5 +1,5 @@
 /**
- *  Hubitat SAJ Solar Inverter integration
+ *  SAJ Solar Inverter integration
  *
  *  Author: Magnus Forslund
  *
@@ -28,6 +28,7 @@
 		attribute "pv3vol", "number"
 		attribute "pv3cur", "number"
 		attribute "gridConPwr", "number"
+        attribute "gridConPwrMax", "number"
 		attribute "gridConFreq", "number"
 		attribute "line1vol", "number"
 		attribute "line2vol", "number"
@@ -176,7 +177,7 @@ def fetchInverterData() {
             clear()
         }
         
-        updateTile(state.gridConPwr, state.todayGen, state.totalGen)
+        updateTile(state.gridConPwr, state.gridConPwrMax, state.todayGen, state.totalGen)
         
     }
 }
@@ -202,12 +203,13 @@ private clear() {
     setRunState(0)
 }
 
-private updateTile(power, todayGen, totalGen) {
+private updateTile(power, powerMax, todayGen, totalGen) {
     def tileHTML = "<table class=\"SolarInverter\">"
     tileHTML += "<caption><span class=\"material-symbols-outlined\">solar_power</span></caption>"
-    tileHTML += "<tr><th>Power</th><td>${power} <span class=\"small\">W</span></td></tr>"
-    tileHTML += "<tr><th>Today</th><td>${todayGen} <span class=\"small\">kWh</span></td></tr>"
-    tileHTML += "<tr><th>Total</th><td>${totalGen} <span class=\"small\">kWh</span></td></tr>"
+    tileHTML += "<tr class=\"power\"><th>Power</th><td>${power.toInteger()} <span class=\"small\">W</span></td></tr>"
+    tileHTML += "<tr class=\"today\"><th>Today</th><td>${todayGen} <span class=\"small\">kWh</span></td></tr>"
+    tileHTML += "<tr class=\"total\"><th>Total</th><td>${totalGen} <span class=\"small\">kWh</span></td></tr>"
+    tileHTML += "<tr class=\"max\"><th>Max</th><td>${powerMax.toInteger()} <span class=\"small\">W</span></td></tr>"
     tileHTML += "</table>"
     if (debug) log.debug "${tileHTML}"
     state.tileHTML = tileHTML
@@ -322,8 +324,14 @@ private setGridConPwr(rawValue) {
     def descriptionText = "${device.displayName} grid connected power is ${value} ${unit}"
     if (debug) log.debug "${descriptionText}"
     state.gridConPwr = value
-    //sendEvent(name: "GridConPwr", value: state.gridConPwr, descriptionText: descriptionText, unit: unit)
     sendEvent(name: "power", value: state.gridConPwr, descriptionText: descriptionText, unit: unit)
+    
+    if (debug) log.debug "Max power: ${state.gridConPwrMax} W"    
+    if(state.gridConPwrMax == null || value > state.gridConPwrMax) {
+        if (debug) log.debug "New max power: ${value} W"
+        state.gridConPwrMax = value
+    }
+    sendEvent(name: "powerMax", value: state.gridConPwrMax, descriptionText: "", unit: unit)
 }
 
 private setGridConFreq(rawValue) {
