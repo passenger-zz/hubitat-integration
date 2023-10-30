@@ -181,7 +181,7 @@ def fetchInverterData() {
             clear()
         }
         
-        updateTile(state.gridConPwr, state.gridConPwrMax, state.todayGen, state.totalGen)
+        updateTile(state.gridConPwr, state.gridConPwrMax, state.todayGen, state.totalGen, state.runState)
         
     }
 }
@@ -207,8 +207,11 @@ private clear() {
     setRunState(0)
 }
 
-private updateTile(power, powerMax, todayGen, totalGen) {
-    def tileHTML = "<table class=\"SolarInverter\">"
+private updateTile(power, powerMax, todayGen, totalGen, runState) {
+
+    if (debug) log.debug("updateTile");
+
+    def tileHTML = "<table class=\"SolarInverter ${runState}\">"
     tileHTML += "<caption><span class=\"material-symbols-outlined\">solar_power</span></caption>"
     tileHTML += "<tr class=\"power\"><th>Power</th><td>${power.toInteger()} <span class=\"small\">W</span></td></tr>"
     tileHTML += "<tr class=\"today\"><th>Today</th><td>${todayGen} <span class=\"small\">kWh</span></td></tr>"
