@@ -57,6 +57,10 @@
     }
 }
 
+def version() {
+    return "0.1"
+}
+
 def initialize() {
 	if(debug) log.debug("init")
     clear()
