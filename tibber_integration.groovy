@@ -171,10 +171,8 @@ private updateTile(price, priceNextHour, pricePlus2Hour, priceMaxDay, priceMinDa
     tileHTML += "<caption><span class=\"material-symbols-outlined\">electric_bolt</span></caption>"
     tileHTML += "<tr class=\"price\"><th>Price</th><td>${price} <span class=\"small\">${unit}</span></td></tr>"
     tileHTML += "<tr class=\"future\"><th>+1h</th><td>${priceNextHour} <span class=\"small\">${unit}</span></td></tr>"
-    //tileHTML += "<tr class=\"future\"><th>+2h</th><td>${pricePlus2Hour} <span class=\"small\">${unit}</span></td></tr>"
-    tileHTML += "<tr class=\"min\"><th>Min</th><td>${priceMinDay} <span class=\"small\">${unit}</span></td></tr>"
-    tileHTML += "<tr class=\"med\"><th>Med</th><td>${priceMedDay} <span class=\"small\">${unit}</span></td></tr>"
-    tileHTML += "<tr class=\"max\"><th>Max</th><td>${priceMaxDay} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr class=\"future\"><th>+2h</th><td>${pricePlus2Hour} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr class=\"minmax\"><th>Span</th><td>${priceMinDay} to ${priceMaxDay} <span class=\"small\">${unit}</span></td></tr>"
     tileHTML += "</table>"
     if (debug) log.debug "${tileHTML}"
     state.tileHTML = tileHTML
