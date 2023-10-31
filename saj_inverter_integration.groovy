@@ -216,7 +216,7 @@ private updateTile(power, powerMax, todayGen, totalGen, runState) {
     tileHTML += "<tr class=\"power\"><th>Power</th><td>${power.toInteger()} <span class=\"small\">W</span></td></tr>"
     tileHTML += "<tr class=\"today\"><th>Today</th><td>${todayGen} <span class=\"small\">kWh</span></td></tr>"
     tileHTML += "<tr class=\"total\"><th>Total</th><td>${totalGen} <span class=\"small\">kWh</span></td></tr>"
-    tileHTML += "<tr class=\"max\"><th>Max</th><td>${powerMax.toInteger()} <span class=\"small\">W</span></td></tr>"
+    tileHTML += "<tr class=\"max\"><th>Peek</th><td>${powerMax.toInteger()} <span class=\"small\">W</span></td></tr>"
     tileHTML += "</table>"
     if (debug) log.debug "${tileHTML}"
     state.tileHTML = tileHTML
@@ -225,6 +225,7 @@ private updateTile(power, powerMax, todayGen, totalGen, runState) {
 
 private setTotalGen(rawValue) {
     if(rawValue.toInteger() == 65535) rawValue = 0;
+    if(rawValue.toInteger() == 0) return;
     def value = rawValue.toInteger() / 100
     def unit = "kWh"
     def descriptionText = "${device.displayName} total generated energy is ${value} ${unit}"
@@ -235,6 +236,7 @@ private setTotalGen(rawValue) {
 
 private setTotalRunTime(rawValue) {
     if(rawValue.toInteger() == 65535) rawValue = 0;
+    if(rawValue.toInteger() == 0) return;
     def value = rawValue.toInteger() / 10
     def unit = "h"
     def descriptionText = "${device.displayName} total runtime is ${value} ${unit}"
@@ -244,6 +246,7 @@ private setTotalRunTime(rawValue) {
 }
 
 private setTodayGen(rawValue) {
+    if(rawValue.toInteger() == 0) return;
     if(rawValue.toInteger() == 65535) rawValue = 0;
     def value = rawValue.toInteger() / 100
     def unit = "kWh"
