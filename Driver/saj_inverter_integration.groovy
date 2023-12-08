@@ -211,12 +211,12 @@ private updateTile(power, powerMax, todayGen, totalGen, runState) {
 
     if (debug) log.debug("updateTile");
 
-    def tileHTML = "<table class=\"SolarInverter ${runState}\">"
+    def tileHTML = "<table class=\"SolarInverter custom ${runState}\">"
     tileHTML += "<caption><span class=\"material-symbols-outlined\">solar_power</span></caption>"
-    tileHTML += "<tr class=\"power\"><th>Power</th><td>${power.toInteger()} <span class=\"small\">W</span></td></tr>"
-    tileHTML += "<tr class=\"today\"><th>Today</th><td>${todayGen} <span class=\"small\">kWh</span></td></tr>"
-    tileHTML += "<tr class=\"total\"><th>Total</th><td>${totalGen} <span class=\"small\">kWh</span></td></tr>"
-    tileHTML += "<tr class=\"max\"><th>Peek</th><td>${powerMax.toInteger()} <span class=\"small\">W</span></td></tr>"
+    tileHTML += "<tr class=\"head\"><th colspan=\"2\">${power.toInteger()} <span class=\"small\">W</span></th></tr>"
+    tileHTML += "<tr><th>Today</th><td>${todayGen} <span class=\"small\">kWh</span></td></tr>"
+    tileHTML += "<tr><th>Total</th><td>${totalGen} <span class=\"small\">kWh</span></td></tr>"
+    tileHTML += "<tr><th>Peek</th><td>${powerMax.toInteger()} <span class=\"small\">W</span></td></tr>"
     tileHTML += "</table>"
     if (debug) log.debug "${tileHTML}"
     state.tileHTML = tileHTML

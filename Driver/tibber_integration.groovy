@@ -9,7 +9,7 @@
  *  Tibber API key and password
  */
 metadata {
-	definition (name: "Tibber price device handler", namespace: "Tibber", author: "tibberdev") {
+	definition (name: "Tibber price device handler", namespace: "Tibber", author: "Magnus Forslund") {
 		capability "Sensor"
 		capability "Energy Meter"
         capability "Refresh"
@@ -167,12 +167,12 @@ def getPrice() {
 }
 
 private updateTile(price, priceNextHour, pricePlus2Hour, priceMaxDay, priceMinDay, priceMedDay, unit) {
-    def tileHTML = "<table class=\"tibber\">"
+    def tileHTML = "<table class=\"tibber custom\">"
     tileHTML += "<caption><span class=\"material-symbols-outlined\">electric_bolt</span></caption>"
-    tileHTML += "<tr class=\"price\"><th>Price</th><td>${price} <span class=\"small\">${unit}</span></td></tr>"
-    tileHTML += "<tr class=\"future\"><th>+1h</th><td>${priceNextHour} <span class=\"small\">${unit}</span></td></tr>"
-    tileHTML += "<tr class=\"future\"><th>+2h</th><td>${pricePlus2Hour} <span class=\"small\">${unit}</span></td></tr>"
-    tileHTML += "<tr class=\"minmax\"><th>Span</th><td>${priceMinDay} to ${priceMaxDay} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr class=\"head\"><th colspan=\"2\">${price} <span class=\"small\">${unit}</span></th></tr>"
+    tileHTML += "<tr><th>+1h</th><td>${priceNextHour} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr><th>+2h</th><td>${pricePlus2Hour} <span class=\"small\">${unit}</span></td></tr>"
+    tileHTML += "<tr><th>Range</th><td>${priceMinDay} to ${priceMaxDay} <span class=\"small\">${unit}</span></td></tr>"
     tileHTML += "</table>"
     if (debug) log.debug "${tileHTML}"
     state.tileHTML = tileHTML
@@ -280,13 +280,13 @@ def MinValue(List values){
 }
 
 def MedValue(List values){
-    log.debug("MedValue")
+    //log.debug("MedValue")
 	def med = 0
 	values.each{
         med = med + it.total
     }
     med = med / values.size
-    log.debug("   med" + med)
+    //log.debug("   med" + med)
     return med
 }
 
