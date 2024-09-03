@@ -90,7 +90,7 @@ private updateTile() {
     def tileHTML = "<table class=\"BasTherm custom ${state.heatingOn ? "heat_on" : "heat_off"}\">"
     tileHTML += "<caption><span class=\"material-symbols-outlined\">device_thermostat</span></caption>"
     tileHTML += "<tr class=\"head\"><th colspan=\"2\">${state.currentTemp} <span class=\"small\">&degC</span></th></tr>"
-    tileHTML += "<tr><th>Setpoint</th><td>${state.thermostatSetpoint} <span class=\"small\">&deg;C</span></td></tr>"
+    tileHTML += "<tr><th>Target</th><td>${state.thermostatSetpoint} <span class=\"small\">&deg;C</span></td></tr>"
     tileHTML += "</table>"
     if (debug) log.debug "${tileHTML}"    
     state.tileHTML = tileHTML
